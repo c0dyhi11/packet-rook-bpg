@@ -14,4 +14,4 @@ printf "\n[rook:vars]\nansible_python_interpreter=/usr/bin/python3\n" >> $ANSIBL
 
 # Run Ansible
 cd $ANSIBLE_DIR
-ansible -i hosts all -m ping
+ansible-playbook -i hosts setup_k8s.yaml
