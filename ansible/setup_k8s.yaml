@@ -1,0 +1,22 @@
+---
+- hosts: rook
+  tasks:
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+      cache_valid_time: 3600
+      autoclean: yes
+  - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+    shell: |
+      swapoff -a
+      touch /var/local/swapoff
+    args:
+      creates: /var/local/swapoff
+  - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+    replace:
+      path: /etc/fstab
+      regexp: '^(.+?\sswap\s+sw\s+.*)$'
+      replace: '# \1'
+
